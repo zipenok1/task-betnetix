@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Admin {
+  id         String    @id @default(uuid())
+  name       String
+  email      String    @unique
+  password   String
+  role       Role      @default(manager)
+  tokenId    String?   @unique 
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  @@map("admins")
+}
+
+enum Role { 
+  root 
+  manager 
+}
+
+model ShopOwner {
+  id         String   @id @default(uuid())
+  name       String
+  phone      String
+  email      String?  
+
+  shops      Shop[]
+
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  @@map("shop_owners")
+}
+
+model Shop {
+  id            String   @id @default(uuid())
+  name          String   
+  legalDetails  Json?    
+  address       String   
+  
+  login         String   @unique  
+  password      String             
+  
+  ownerId       String
+  owner         ShopOwner @relation(fields: [ownerId], references: [id])
+  terminals     Terminal[]
+  requests      ConnectionRequest[]
+  
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@map("shops")
+}
+
+model Terminal {
+  id            String         @id @default(uuid())
+  mac           String         @unique  
+  status        TerminalStatus @default(inactive)
+  
+  lastHeartbeat DateTime? 
+  
+  shopId        String
+  shop          Shop     @relation(fields: [shopId], references: [id])
+  
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("terminals")
+}
+
+enum TerminalStatus {
+  active    
+  inactive  
+}
+
+model ConnectionRequest {
+  id        String        @id @default(uuid())
+  mac       String        
+  status    RequestStatus @default(pending)
+  comment   String      
+  
+  shopId    String
+  shop      Shop     @relation(fields: [shopId], references: [id])
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("connection_requests")
+}
+
+enum RequestStatus {
+  pending
+  approved  
+  rejected  
+}
