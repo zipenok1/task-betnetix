@@ -1,12 +1,10 @@
+import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  const config = app.get(ConfigService)
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -14,7 +12,7 @@ async function bootstrap() {
     })
   )
 
-  await app.listen(config.getOrThrow<number>('SERVER_PORT'));
+  await app.listen(process.env.SERVER_PORT || 3000);
 }
 bootstrap();
  
