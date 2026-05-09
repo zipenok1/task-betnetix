@@ -343,3 +343,170 @@ npx prisma migrate deploy
 {
     "message": "учетные данные обновлены"
 }
+```
+
+### Терминалы (root + manager)
+
+#### GET /terminals
+Список терминалов.
+
+**Заголовки:** `Authorization: Bearer <access_token>`
+
+**Выходные данные:**
+```json
+[
+    {
+        "id": "uuid",
+        "mac": "string",
+        "status": "active | inactive",
+        "lastHeartbeat": "datetime | null",
+        "shop": {
+            "id": "uuid",
+            "name": "string",
+            "login": "string"
+        }
+    }
+]
+GET /terminals/:id
+Карточка терминала.
+
+Заголовки: Authorization: Bearer <access_token>
+
+Выходные данные:
+
+json
+{
+    "id": "uuid",
+    "mac": "string",
+    "status": "active | inactive",
+    "lastHeartbeat": "datetime | null",
+    "shop": {
+        "id": "uuid",
+        "name": "string",
+        "login": "string",
+        "address": "string"
+    }
+}
+PATCH /terminals/:id/status
+Обновить статус терминала вручную.
+
+Заголовки: Authorization: Bearer <access_token>
+
+Входные данные:
+
+json
+{
+    "status": "active | inactive"
+}
+Выходные данные:
+
+json
+{
+    "id": "uuid",
+    "mac": "string",
+    "status": "active | inactive",
+    "updatedAt": "datetime"
+}
+POST /terminals/alive
+Heartbeat от терминала (обновление статуса «активный»). Публичный эндпоинт.
+
+Входные данные:
+
+json
+{
+    "mac": "string",
+    "shopLogin": "string",
+    "shopPassword": "string"
+}
+Выходные данные:
+
+json
+{
+    "id": "uuid",
+    "mac": "string",
+    "status": "active",
+    "lastHeartbeat": "datetime"
+}
+
+Заявки на подключение терминалов (root + manager)
+GET /requests
+Список заявок.
+
+Заголовки: Authorization: Bearer <access_token>
+
+Выходные данные:
+
+json
+[
+    {
+        "id": "uuid",
+        "mac": "string",
+        "status": "pending | approved | rejected",
+        "comment": "string | null",
+        "createdAt": "datetime",
+        "shop": {
+            "id": "uuid",
+            "name": "string",
+            "login": "string",
+            "address": "string"
+        }
+    }
+]
+POST /requests
+Создать заявку(для тестирования).
+
+Заголовки: Authorization: Bearer <access_token>
+
+Входные данные:
+
+json
+{
+    "mac": "string",
+    "shopId": "uuid",
+    "comment": "string (опционально)"
+}
+
+PATCH /requests/:id/approve
+Одобрить заявку → создать терминал.
+
+Заголовки: Authorization: Bearer <access_token>
+
+Выходные данные:
+
+json
+{
+    "message": "заявка одобрена, терминал создан"
+}
+
+PATCH /requests/:id/reject
+Отклонить заявку.
+
+Заголовки: Authorization: Bearer <access_token>
+
+Выходные данные:
+
+json
+{
+    "message": "заявка отклонена"
+}
+POST /requests/:id/comment
+Добавить комментарий к заявке.
+
+Заголовки: Authorization: Bearer <access_token>
+
+Входные данные:
+
+json
+{
+    "comment": "string"
+}
+Выходные данные:
+
+json
+{
+    "id": "uuid",
+    "mac": "string",
+    "status": "pending | approved | rejected",
+    "comment": "string",
+    "updatedAt": "datetime"
+}

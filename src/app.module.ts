@@ -6,6 +6,7 @@ import { SeedService } from './seed/seed.service';
 import { ShopOwnersModule } from './modules/shop-owners/shop-owners.module';
 import { ShopsModule } from './modules/shops/shops.module';
 import { TerminalsModule } from './modules/terminals/terminals.module';
+import { RequestsModule } from './modules/requests/requests.module';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { TerminalsModule } from './modules/terminals/terminals.module';
     AdminModule,
     ShopOwnersModule,
     ShopsModule,
-    TerminalsModule
+    TerminalsModule,
+    RequestsModule
   ],
   providers: [SeedService]
 })
