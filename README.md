@@ -7,26 +7,10 @@
 git clone https://github.com/zipenok1/task-betnetix.git
 ```
 
-### 2. Установка зависимостей
-```bash
-npm install
-```
-
-### 3. Настройка переменных окружения
-Создайте файл `.env` в корне проекта
-
-
-### 4. Запуск базы данных
+### 2. Запуск приложения
 ```bash
 docker-compose up -d
 ```
-
-### 5. Применение миграций
-```bash
-npx prisma migrate deploy
-```
-
-### 6. Запуск приложения
 
 > **При первом запуске автоматически создается root-пользователь:**  
 > Email: `root@example.com`  

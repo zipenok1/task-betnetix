@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: betnetix_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: betnetix
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - betnetix_network
+
+  backend:
+    build: .
+    container_name: betnetix_backend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://postgres:1234@postgres:5432/betnetix"
+      JWT_SECRET: "super-secret-key"
+      JWT_REFRESH_SECRET: "super-refresh-secret-key"
+      SERVER_PORT: 3000
+      ROOT_PASSWORD: "root123"
+    depends_on:
+      - postgres
+    networks:
+      - betnetix_network
+
+volumes:
+  postgres_data:
+
+networks:
+  betnetix_network:
+    driver: bridge
