@@ -30,9 +30,9 @@ enum Role {
 
 model ShopOwner {
   id         String   @id @default(uuid())
-  name       String
-  phone      String
-  email      String?  
+  name       String   
+  phone      String   @unique
+  email      String?  @unique
 
   shops      Shop[]
 

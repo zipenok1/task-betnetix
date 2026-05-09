@@ -7,7 +7,7 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 
 
-@Controller('admin')
+@Controller('admins')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles('root')
 export class AdminController {
