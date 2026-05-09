@@ -8,7 +8,7 @@ import { UpdateAdminDto } from './dto/update-admin.dto';
 export class AdminService {
     constructor(private prisma: PrismaService) {}
 
-    async getAll() {
+    async findAll() {
         return await this.prisma.admin.findMany({
             select:{
                 id: true,
@@ -22,8 +22,8 @@ export class AdminService {
     async create(dto: CreateAdminDto) {
         const {name, email, password} = dto
 
-        const existing = await this.prisma.admin.findUnique({ where: { email } })
-        if(existing) throw new ConflictException('пользователь с таким email уже существует')
+        const menager = await this.prisma.admin.findUnique({ where: { email } })
+        if(menager) throw new ConflictException('пользователь с таким email уже существует')
 
         const hashedPassword = await hashPassword(password)
 
@@ -40,12 +40,12 @@ export class AdminService {
     }
 
     async change(id: string, dto: UpdateAdminDto) {
+        const {password} = dto
+
         const menager = await this.prisma.admin.findUnique({where: {id: id}})
         if(!menager) throw new NotFoundException('menager не найден')
 
         if(menager.role === 'root') throw new ForbiddenException('нельзя изменить root')
-
-        const {password} = dto
 
         const hashedPassword = await hashPassword(password)
 
@@ -57,13 +57,11 @@ export class AdminService {
         return { message: 'пароль успешно изменен' }
     }
 
-    async delete(id: string, currentId: string) {
+    async delete(id: string) {
         const menager = await this.prisma.admin.findUnique({where: {id: id}})
         if(!menager) throw new NotFoundException('menager не найден')
         
         if(menager.role === 'root') throw new ForbiddenException('нельзя удалить root')
-
-        if(id === currentId) throw new ForbiddenException('нельзя удалить самого себя')
         
         await this.prisma.admin.delete({where: {id: id}})
 

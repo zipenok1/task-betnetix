@@ -12,21 +12,23 @@ export class SeedService implements OnModuleInit {
     })
 
     if (!root) {
-      const hashedPassword = await hashPassword('root123')
+      const rootPassword = process.env.ROOT_PASSWORD
+      if(!rootPassword) throw new Error('ROOT_PASSWORD не задан')
+
+      const hashedPassword = await hashPassword(rootPassword)
       
       await this.prisma.admin.create({
         data: {
-          name: 'Global Admin',
+          name: 'Root',
           email: 'root@example.com',
           password: hashedPassword,
           role: 'root'
         }
       })
       
-      console.log('root создан: root@example.com');
+      console.log('root создан')
     } else{
-      console.log('root существует');
+      console.log('root существует')
     }
-
   }
 }

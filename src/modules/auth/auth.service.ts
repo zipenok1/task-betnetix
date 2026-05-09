@@ -22,20 +22,81 @@ export class AuthService {
         if(!isValidPassword) throw new UnauthorizedException('неверный пароль')
 
         const tokenId = randomUUID()
-        
+
         await this.prisma.admin.update({
             where: {id: admin.id},
             data: {tokenId}
         })
 
-        const payload = { sub: admin.id, email: admin.email, role: admin.role, tokenId }
-        const token = this.jwtService.sign(payload)
+        const accessPayload = { 
+            sub: admin.id, 
+            email: admin.email, 
+            role: admin.role, 
+            tokenId 
+        }
+        const accessToken = this.jwtService.sign(accessPayload, {
+            secret: process.env.JWT_SECRET,
+            expiresIn: '1h'
+        })
 
-        return { access_token: token };
+        const refreshPayload = {sub: admin.id, tokenId}
+        const refreshToken = this.jwtService.sign(refreshPayload, {
+            secret: process.env.JWT_REFRESH_SECRET,
+            expiresIn: '7d'
+        })
+
+        return { 
+            access_token: accessToken,
+            refresh_token: refreshToken
+        }
     }
 
-    async logout() {}
+    async logout(id: string, tokenId: string) {
+        const admin = await this.prisma.admin.findFirst({
+            where: {
+                id,
+                tokenId: tokenId
+            }
+        })
+        if(!admin) throw new UnauthorizedException('сессия уже завершена')
+        
+        await this.prisma.admin.update({
+            where: { id },
+            data: { tokenId: null }
+        })
 
-    async refresh() {}
+        return {message: 'сессия завершена'}
+    }
 
+    async refresh(refreshToken: string) {
+        const payload = this.jwtService.verify(refreshToken, {
+            secret: process.env.JWT_REFRESH_SECRET,
+        })
+
+        const admin = await this.prisma.admin.findUnique({
+            where: {id: payload.sub}
+        })
+        if(!admin || admin.tokenId !== payload.tokenId) {
+            throw new UnauthorizedException('невалидный refresh token')
+        }
+        
+        const newTokenId = randomUUID()
+
+        await this.prisma.admin.update({
+            where: {id: admin.id},
+            data: {tokenId: newTokenId}
+        })
+
+        const newAccessToken = this.jwtService.sign({
+            sub: admin.id,
+            email: admin.email,
+            role: admin.role,
+            tokenId: newTokenId,            
+        }, {
+            secret: process.env.JWT_SECRET,
+            expiresIn: '1h'
+        })
+
+        return {access_token: newAccessToken}
+    }
 }

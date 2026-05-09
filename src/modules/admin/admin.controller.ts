@@ -5,7 +5,6 @@ import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
-import type { ExpressRequest } from '../../common/interfaces/express-request.interface';
 
 
 @Controller('admin')
@@ -15,8 +14,9 @@ export class AdminController {
   constructor(private readonly adminService: AdminService) {}
   
   @Get()
-  async getAll(){
-    return this.adminService.getAll()
+  @Roles('root', 'manager')
+  async findAll(){
+    return this.adminService.findAll()
   }
 
   @Post()
@@ -30,7 +30,7 @@ export class AdminController {
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string, @Req() req: ExpressRequest){
-    return this.adminService.delete(id, req.user.id)
+  async delete(@Param('id') id: string){
+    return this.adminService.delete(id)
   }
 }
