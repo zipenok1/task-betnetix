@@ -540,6 +540,7 @@ Heartbeat от терминала (обновление статуса «акт�
   "oldPassword": "string",
   "newPassword": "string"
 }
+```
 
 **Выходные данные:**
 ```json
