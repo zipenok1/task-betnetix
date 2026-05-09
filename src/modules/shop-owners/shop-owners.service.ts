@@ -12,17 +12,19 @@ export class ShopOwnersService {
             select: {
                 id: true,
                 name: true,
-                phone: true
+                phone: true,
             }
         })
     }
 
     async findById(id: string){
         const owner = await this.prisma.shopOwner.findUnique({
-            where: {id: id}
+            where: {id: id},
+            include: {  
+                shops: true  
+            }   
         }) 
         if(!owner) throw new NotFoundException('владелец не найден')
-        
         return owner
     }
 
@@ -47,7 +49,7 @@ export class ShopOwnersService {
             }
         })
 
-        return {message: `владелец: ${dto.name} создан`}
+        return {message: `владелец: ${name} создан`}
     }
 
     async update(id: string, dto: UpdateOwnersDto){
