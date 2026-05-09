@@ -526,4 +526,24 @@ Heartbeat от терминала (обновление статуса «акт�
   "updatedAt": "datetime"
 }
 ```
+
+### Профиль
+
+#### `PATCH /profile/password`
+Смена пароля текущего пользователя.
+
+**Заголовки:** `Authorization: Bearer <access_token>`
+
+**Входные данные:**
+```json
+{
+  "oldPassword": "string",
+  "newPassword": "string"
+}
+
+**Выходные данные:**
+```json
+{
+  "message": "пароль успешно изменен"
+}
 ```

@@ -7,6 +7,7 @@ import { ShopOwnersModule } from './modules/shop-owners/shop-owners.module';
 import { ShopsModule } from './modules/shops/shops.module';
 import { TerminalsModule } from './modules/terminals/terminals.module';
 import { RequestsModule } from './modules/requests/requests.module';
+import { ProfileModule } from './modules/profile/profile.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { RequestsModule } from './modules/requests/requests.module';
     ShopOwnersModule,
     ShopsModule,
     TerminalsModule,
-    RequestsModule
+    RequestsModule,
+    ProfileModule
   ],
   providers: [SeedService]
 })
