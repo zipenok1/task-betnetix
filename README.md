@@ -15,6 +15,7 @@ npm install
 ### 3. Настройка переменных окружения
 Создайте файл `.env` в корне проекта
 
+
 ### 4. Запуск базы данных
 ```bash
 docker-compose up -d
@@ -26,9 +27,10 @@ npx prisma migrate deploy
 ```
 
 ### 6. Запуск приложения
-При первом запуске автоматически создается root-пользователь:
-- Email: `root@example.com`
-- Пароль: `root123`
+
+> **При первом запуске автоматически создается root-пользователь:**  
+> Email: `root@example.com`  
+> Пароль: `root123`
 
 ---
 
@@ -36,7 +38,7 @@ npx prisma migrate deploy
 
 ### Авторизация
 
-#### POST /auth/login
+#### `POST /auth/login`
 Вход по email и паролю.
 
 **Входные данные:**
@@ -55,7 +57,7 @@ npx prisma migrate deploy
 }
 ```
 
-#### POST /auth/logout
+#### `POST /auth/logout`
 Завершение текущей сессии.
 
 **Заголовки:** `Authorization: Bearer <access_token>`
@@ -67,7 +69,7 @@ npx prisma migrate deploy
 }
 ```
 
-#### POST /auth/refresh
+#### `POST /auth/refresh`
 Обновление JWT.
 
 **Входные данные:**
@@ -88,7 +90,7 @@ npx prisma migrate deploy
 
 ### Администраторы (только root)
 
-#### GET /admins
+#### `GET /admins`
 Список администраторов.
 
 **Заголовки:** `Authorization: Bearer <access_token>`
@@ -96,16 +98,16 @@ npx prisma migrate deploy
 **Выходные данные:**
 ```json
 [
-    {
-      "id": "uuid",
-      "name": "string",
-      "email": "string",
-      "role": "root | manager"
-    }
+  {
+    "id": "uuid",
+    "name": "string",
+    "email": "string",
+    "role": "root | manager"
+  }
 ]
 ```
 
-#### POST /admins
+#### `POST /admins`
 Создать менеджера.
 
 **Заголовки:** `Authorization: Bearer <access_token>`
@@ -126,7 +128,7 @@ npx prisma migrate deploy
 }
 ```
 
-#### PATCH /admins/:id/password
+#### `PATCH /admins/:id/password`
 Смена пароля менеджера.
 
 **Заголовки:** `Authorization: Bearer <access_token>`
@@ -145,7 +147,7 @@ npx prisma migrate deploy
 }
 ```
 
-#### DELETE /admins/:id
+#### `DELETE /admins/:id`
 Удалить менеджера.
 
 **Заголовки:** `Authorization: Bearer <access_token>`
@@ -161,7 +163,7 @@ npx prisma migrate deploy
 
 ### Владельцы магазинов
 
-#### GET /shops-owners
+#### `GET /shops-owners`
 Список владельцев.
 
 **Заголовки:** `Authorization: Bearer <access_token>`
@@ -169,15 +171,15 @@ npx prisma migrate deploy
 **Выходные данные:**
 ```json
 [
-    {
-      "id": "uuid",
-      "name": "string",
-      "phone": "string"
-    }
+  {
+    "id": "uuid",
+    "name": "string",
+    "phone": "string"
+  }
 ]
 ```
 
-#### GET /shops-owners/:id
+#### `GET /shops-owners/:id`
 Карточка владельца.
 
 **Заголовки:** `Authorization: Bearer <access_token>`
@@ -185,21 +187,21 @@ npx prisma migrate deploy
 **Выходные данные:**
 ```json
 {
-    "id": "uuid",
-    "name": "string",
-    "phone": "string",
-    "email": "string | null",
-    "shops": [
-        {
-            "id": "uuid",
-            "name": "string",
-            "address": "string"
-        }
-    ]
+  "id": "uuid",
+  "name": "string",
+  "phone": "string",
+  "email": "string | null",
+  "shops": [
+    {
+      "id": "uuid",
+      "name": "string",
+      "address": "string"
+    }
+  ]
 }
 ```
 
-#### POST /shops-owners
+#### `POST /shops-owners`
 Создать владельца.
 
 **Заголовки:** `Authorization: Bearer <access_token>`
@@ -207,20 +209,20 @@ npx prisma migrate deploy
 **Входные данные:**
 ```json
 {
-    "name": "string",
-    "phone": "string",
-    "email": "string"
+  "name": "string",
+  "phone": "string",
+  "email": "string"
 }
 ```
 
 **Выходные данные:**
 ```json
 {
-    "message": "владелец {name} создан"
+  "message": "владелец {name} создан"
 }
 ```
 
-#### PATCH /shops-owners/:id
+#### `PATCH /shops-owners/:id`
 Изменить владельца.
 
 **Заголовки:** `Authorization: Bearer <access_token>`
@@ -228,20 +230,20 @@ npx prisma migrate deploy
 **Входные данные:**
 ```json
 {
-    "name": "string",
-    "phone": "string",
-    "email": "string"
+  "name": "string",
+  "phone": "string",
+  "email": "string"
 }
 ```
 
 **Выходные данные:**
 ```json
 {
-    "message": "данные успешно изменены"
+  "message": "данные успешно изменены"
 }
 ```
 
-#### DELETE /shops-owners/:id
+#### `DELETE /shops-owners/:id`
 Удалить владельца.
 
 **Заголовки:** `Authorization: Bearer <access_token>`
@@ -249,7 +251,7 @@ npx prisma migrate deploy
 **Выходные данные:**
 ```json
 {
-    "message": "владелец удален"
+  "message": "владелец удален"
 }
 ```
 
@@ -257,7 +259,7 @@ npx prisma migrate deploy
 
 ### Магазины
 
-#### GET /shops
+#### `GET /shops`
 Список магазинов.
 
 **Заголовки:** `Authorization: Bearer <access_token>`
@@ -265,20 +267,20 @@ npx prisma migrate deploy
 **Выходные данные:**
 ```json
 [
-    {
-        "id": "uuid",
-        "name": "string",
-        "address": "string",
-        "login": "string",
-        "owner": {
-            "id": "uuid",
-            "name": "string"
-        }
+  {
+    "id": "uuid",
+    "name": "string",
+    "address": "string",
+    "login": "string",
+    "owner": {
+      "id": "uuid",
+      "name": "string"
     }
+  }
 ]
 ```
 
-#### GET /shops/:id
+#### `GET /shops/:id`
 Карточка магазина.
 
 **Заголовки:** `Authorization: Bearer <access_token>`
@@ -286,22 +288,22 @@ npx prisma migrate deploy
 **Выходные данные:**
 ```json
 {
+  "id": "uuid",
+  "name": "string",
+  "address": "string",
+  "login": "string",
+  "legalDetails": "object | null",
+  "owner": {
     "id": "uuid",
     "name": "string",
-    "address": "string",
-    "login": "string",
-    "legalDetails": "object | null",
-    "owner": {
-        "id": "uuid",
-        "name": "string",
-        "phone": "string",
-        "email": "string | null"
-    },
-    "terminals": []
+    "phone": "string",
+    "email": "string | null"
+  },
+  "terminals": []
 }
 ```
 
-#### POST /shops
+#### `POST /shops`
 Создать магазин.
 
 **Заголовки:** `Authorization: Bearer <access_token>`
@@ -309,23 +311,23 @@ npx prisma migrate deploy
 **Входные данные:**
 ```json
 {
-    "name": "string",
-    "address": "string",
-    "login": "string",
-    "password": "string",
-    "ownerId": "uuid",
-    "legalDetails": "(опционально)"
+  "name": "string",
+  "address": "string",
+  "login": "string",
+  "password": "string",
+  "ownerId": "uuid",
+  "legalDetails": "object (опционально)"
 }
 ```
 
 **Выходные данные:**
 ```json
 {
-    "message": "магазин {name} создан"
+  "message": "магазин {name} создан"
 }
 ```
 
-#### PATCH /shops/:id/credentials
+#### `PATCH /shops/:id/credentials`
 Изменить логин/пароль магазина.
 
 **Заголовки:** `Authorization: Bearer <access_token>`
@@ -333,21 +335,23 @@ npx prisma migrate deploy
 **Входные данные:**
 ```json
 {
-    "login": "string (опционально)",
-    "password": "string (опционально)"
+  "login": "string (опционально)",
+  "password": "string (опционально)"
 }
 ```
 
 **Выходные данные:**
 ```json
 {
-    "message": "учетные данные обновлены"
+  "message": "учетные данные обновлены"
 }
 ```
 
+---
+
 ### Терминалы (root + manager)
 
-#### GET /terminals
+#### `GET /terminals`
 Список терминалов.
 
 **Заголовки:** `Authorization: Bearer <access_token>`
@@ -355,158 +359,171 @@ npx prisma migrate deploy
 **Выходные данные:**
 ```json
 [
-    {
-        "id": "uuid",
-        "mac": "string",
-        "status": "active | inactive",
-        "lastHeartbeat": "datetime | null",
-        "shop": {
-            "id": "uuid",
-            "name": "string",
-            "login": "string"
-        }
-    }
-]
-GET /terminals/:id
-Карточка терминала.
-
-Заголовки: Authorization: Bearer <access_token>
-
-Выходные данные:
-
-json
-{
+  {
     "id": "uuid",
     "mac": "string",
     "status": "active | inactive",
     "lastHeartbeat": "datetime | null",
     "shop": {
-        "id": "uuid",
-        "name": "string",
-        "login": "string",
-        "address": "string"
+      "id": "uuid",
+      "name": "string",
+      "login": "string"
     }
+  }
+]
+```
+
+#### `GET /terminals/:id`
+Карточка терминала.
+
+**Заголовки:** `Authorization: Bearer <access_token>`
+
+**Выходные данные:**
+```json
+{
+  "id": "uuid",
+  "mac": "string",
+  "status": "active | inactive",
+  "lastHeartbeat": "datetime | null",
+  "shop": {
+    "id": "uuid",
+    "name": "string",
+    "login": "string",
+    "address": "string"
+  }
 }
-PATCH /terminals/:id/status
+```
+
+#### `PATCH /terminals/:id/status`
 Обновить статус терминала вручную.
 
-Заголовки: Authorization: Bearer <access_token>
+**Заголовки:** `Authorization: Bearer <access_token>`
 
-Входные данные:
-
-json
+**Входные данные:**
+```json
 {
-    "status": "active | inactive"
+  "status": "active | inactive"
 }
-Выходные данные:
+```
 
-json
+**Выходные данные:**
+```json
 {
-    "id": "uuid",
-    "mac": "string",
-    "status": "active | inactive",
-    "updatedAt": "datetime"
+  "id": "uuid",
+  "mac": "string",
+  "status": "active | inactive",
+  "updatedAt": "datetime"
 }
-POST /terminals/alive
-Heartbeat от терминала (обновление статуса «активный»). Публичный эндпоинт.
+```
 
-Входные данные:
+#### `POST /terminals/alive`
+Heartbeat от терминала (обновление статуса «активный»). **Публичный эндпоинт.**
 
-json
+**Входные данные:**
+```json
 {
-    "mac": "string",
-    "shopLogin": "string",
-    "shopPassword": "string"
+  "mac": "string",
+  "shopLogin": "string",
+  "shopPassword": "string"
 }
-Выходные данные:
+```
 
-json
+**Выходные данные:**
+```json
 {
-    "id": "uuid",
-    "mac": "string",
-    "status": "active",
-    "lastHeartbeat": "datetime"
+  "id": "uuid",
+  "mac": "string",
+  "status": "active",
+  "lastHeartbeat": "datetime"
 }
+```
 
-Заявки на подключение терминалов (root + manager)
-GET /requests
+---
+
+### Заявки на подключение терминалов (root + manager)
+
+#### `GET /requests`
 Список заявок.
 
-Заголовки: Authorization: Bearer <access_token>
+**Заголовки:** `Authorization: Bearer <access_token>`
 
-Выходные данные:
-
-json
+**Выходные данные:**
+```json
 [
-    {
-        "id": "uuid",
-        "mac": "string",
-        "status": "pending | approved | rejected",
-        "comment": "string | null",
-        "createdAt": "datetime",
-        "shop": {
-            "id": "uuid",
-            "name": "string",
-            "login": "string",
-            "address": "string"
-        }
-    }
-]
-POST /requests
-Создать заявку(для тестирования).
-
-Заголовки: Authorization: Bearer <access_token>
-
-Входные данные:
-
-json
-{
-    "mac": "string",
-    "shopId": "uuid",
-    "comment": "string (опционально)"
-}
-
-PATCH /requests/:id/approve
-Одобрить заявку → создать терминал.
-
-Заголовки: Authorization: Bearer <access_token>
-
-Выходные данные:
-
-json
-{
-    "message": "заявка одобрена, терминал создан"
-}
-
-PATCH /requests/:id/reject
-Отклонить заявку.
-
-Заголовки: Authorization: Bearer <access_token>
-
-Выходные данные:
-
-json
-{
-    "message": "заявка отклонена"
-}
-POST /requests/:id/comment
-Добавить комментарий к заявке.
-
-Заголовки: Authorization: Bearer <access_token>
-
-Входные данные:
-
-json
-{
-    "comment": "string"
-}
-Выходные данные:
-
-json
-{
+  {
     "id": "uuid",
     "mac": "string",
     "status": "pending | approved | rejected",
-    "comment": "string",
-    "updatedAt": "datetime"
+    "comment": "string | null",
+    "createdAt": "datetime",
+    "shop": {
+      "id": "uuid",
+      "name": "string",
+      "login": "string",
+      "address": "string"
+    }
+  }
+]
+```
+
+#### `POST /requests`
+Создать заявку (для тестирования).
+
+**Заголовки:** `Authorization: Bearer <access_token>`
+
+**Входные данные:**
+```json
+{
+  "mac": "string",
+  "shopId": "uuid",
+  "comment": "string (опционально)"
 }
+```
+
+#### `PATCH /requests/:id/approve`
+Одобрить заявку → создать терминал.
+
+**Заголовки:** `Authorization: Bearer <access_token>`
+
+**Выходные данные:**
+```json
+{
+  "message": "заявка одобрена, терминал создан"
+}
+```
+
+#### `PATCH /requests/:id/reject`
+Отклонить заявку.
+
+**Заголовки:** `Authorization: Bearer <access_token>`
+
+**Выходные данные:**
+```json
+{
+  "message": "заявка отклонена"
+}
+```
+
+#### `POST /requests/:id/comment`
+Добавить комментарий к заявке.
+
+**Заголовки:** `Authorization: Bearer <access_token>`
+
+**Входные данные:**
+```json
+{
+  "comment": "string"
+}
+```
+
+**Выходные данные:**
+```json
+{
+  "id": "uuid",
+  "mac": "string",
+  "status": "pending | approved | rejected",
+  "comment": "string",
+  "updatedAt": "datetime"
+}
+```
+```
