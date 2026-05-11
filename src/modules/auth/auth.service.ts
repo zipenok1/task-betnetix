@@ -52,7 +52,7 @@ export class AuthService {
     }
 
     async logout(id: string, tokenId: string) {
-        const admin = await this.prisma.admin.findFirst({
+        const admin = await this.prisma.admin.findUnique({
             where: {
                 id,
                 tokenId: tokenId

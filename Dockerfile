@@ -18,7 +18,7 @@ COPY . .
 
 RUN npm run build
 
-# ---------- Продакшн образ ----------
+
 FROM node:20-alpine
 
 WORKDIR /app
