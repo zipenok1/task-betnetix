@@ -5,7 +5,8 @@
 ### 1. Клонирование репозитория
 ```bash
 git clone https://github.com/zipenok1/task-betnetix.git
-
+```
+```
 cd task-betnetix
 ```
 
