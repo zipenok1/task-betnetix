@@ -97,6 +97,14 @@ export class AuthService {
             expiresIn: '1h'
         })
 
-        return {access_token: newAccessToken}
+        const newRefreshToken = this.jwtService.sign(
+            { sub: admin.id, tokenId: newTokenId },
+            { secret: process.env.JWT_REFRESH_SECRET, expiresIn: '7d' }
+        )
+
+        return {
+            access_token: newAccessToken,
+            refresh_token: newRefreshToken  
+        }
     }
 }

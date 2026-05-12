@@ -69,7 +69,8 @@ docker-compose up -d
 **Выходные данные:**
 ```json
 {
-  "access_token": "string"
+  "access_token": "string",
+  "refresh_token": "string"
 }
 ```
 

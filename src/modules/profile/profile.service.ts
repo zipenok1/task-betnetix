@@ -7,7 +7,7 @@ import { comparePassword, hashPassword } from '../../common/utils/password.utils
 export class ProfileService {
     constructor(private prisma: PrismaService){}
 
-    async changePassword(id, dto: ChangePasswordDto){
+    async changePassword(id: string, dto: ChangePasswordDto){
         const {newPassword, oldPassword} = dto
 
         const admin = await this.prisma.admin.findUnique({

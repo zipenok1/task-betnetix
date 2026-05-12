@@ -3,6 +3,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { CreateShopDto } from './dto/create-shop.dto';
 import { UpdateCredentialsDto } from './dto/update-credentials.dto';
 import { hashPassword } from '../../common/utils/password.utils';
+import { Prisma } from '../../generated/prisma/client';
 
 @Injectable()
 export class ShopsService {
@@ -92,7 +93,7 @@ export class ShopsService {
         })
         if(!shop) throw new NotFoundException('магазин не найден')
 
-        const data: any = {}
+        const data: Prisma.ShopUpdateInput = {}
 
         if (login) {
             const existingLogin = await this.prisma.shop.findUnique({ where: {login}})
